@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CLASSIFIED - Operations Dashboard</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:Arial, sans-serif; }
+body { background:#050805; color:#00ff9d; overflow:hidden; }
+
+/* LOADING SCREEN */
+#loading {
+  position:fixed; inset:0;
+  background:#000;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  z-index:10;
+}
+.loader {
+  width:300px; height:10px;
+  border:1px solid #00ff9d;
+  margin-top:20px;
+}
+.bar {
+  height:100%; width:0%; background:#00ff9d;
+  animation:load 3s forwards;
+}
+@keyframes load { to { width:100%; } }
+
+/* DASHBOARD */
+#app { display:none; height:100vh; display:grid; grid-template-columns:250px 1fr 300px; }
+
+/* SIDEBAR */
+.sidebar {
+  background:#020302;
+  padding:20px;
+  border-right:1px solid #00ff9d33;
+}
+.sidebar h2 { font-size:14px; margin-bottom:10px; }
+.file {
+  padding:8px;
+  margin:5px 0;
+  background:#0a120c;
+  cursor:pointer;
+  border-left:3px solid transparent;
+}
+.file:hover { border-left:3px solid #00ff9d; }
+
+/* CENTER */
+.main {
+  padding:20px;
+  position:relative;
+}
+.header {
+  font-size:18px;
+  margin-bottom:10px;
+  letter-spacing:2px;
+}
+
+/* RADAR */
+.radar {
+  width:300px; height:300px;
+  border-radius:50%;
+  border:2px solid #00ff9d;
+  margin-top:20px;
+  position:relative;
+  overflow:hidden;
+}
+.scan {
+  position:absolute;
+  width:100%; height:100%;
+  background:conic-gradient(from 0deg, transparent, #00ff9d33);
+  animation:spin 3s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* TERMINAL */
+.terminal {
+  background:#000;
+  border:1px solid #00ff9d33;
+  padding:10px;
+  height:200px;
+  overflow:auto;
+  margin-top:20px;
+  font-size:12px;
+}
+input {
+  width:100%; padding:10px;
+  background:#000;
+  border:1px solid #00ff9d;
+  color:#00ff9d;
+  margin-top:10px;
+}
+
+/* RIGHT PANEL */
+.panel {
+  background:#020302;
+  border-left:1px solid #00ff9d33;
+  padding:20px;
+  font-size:12px;
+}
+.alert {
+  color:red;
+  animation:blink 1s infinite;
+}
+@keyframes blink { 50% { opacity:0.2; } }
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading">
+  <h1>BOOTING CLASSIFIED SYSTEM</h1>
+  <div class="loader"><div class="bar"></div></div>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+  <div class="sidebar">
+    <h2>FILES</h2>
+    <div class="file">Operation Nightfall</div>
+    <div class="file">Unit Echo Report</div>
+    <div class="file">Satellite Data</div>
+    <div class="file">Intel Logs</div>
+  </div>
+
+  <div class="main">
+    <div class="header">TACTICAL COMMAND INTERFACE</div>
+
+    <div class="radar">
+      <div class="scan"></div>
+    </div>
+
+    <div class="terminal" id="terminal"></div>
+    <input id="cmd" placeholder="Enter command..." />
+  </div>
+
+  <div class="panel">
+    <h3>STATUS</h3>
+    <p class="alert">● ALERT LEVEL: ELEVATED</p>
+    <p>Units Active: 12</p>
+    <p>Drones Online: 3</p>
+    <p>Satellite Uplink: STABLE</p>
+  </div>
+
+</div>
+
+<script>
+setTimeout(()=>{
+  document.getElementById('loading').style.display='none';
+  document.getElementById('app').style.display='grid';
+},3000);
+
+const terminal = document.getElementById('terminal');
+const cmd = document.getElementById('cmd');
+
+function log(text){
+  terminal.innerHTML += "<div>> " + text + "</div>";
+  terminal.scrollTop = terminal.scrollHeight;
+}
+
+cmd.addEventListener('keydown', e=>{
+  if(e.key === 'Enter'){
+    let val = cmd.value;
+    log(val);
+
+    if(val === "status") log("All systems operational.");
+    else if(val === "alert") log("ALERT PROTOCOL ACTIVATED.");
+    else if(val === "help") log("Commands: status, alert, help");
+    else log("Unknown command.");
+
+    cmd.value = "";
+  }
+});
+
+log("System initialized...");
+log("Secure connection established.");
+</script>
+
+</body>
+</html>
